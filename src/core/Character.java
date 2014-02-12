@@ -1,9 +1,9 @@
 package core;
 
-import types.Component;
-import types.Movable;
 
-public class Character extends Movable {
+public class Character {
+	protected int x = 0, y = 0;
+	
 	public enum Direction {
 		up,
 		down,
@@ -11,34 +11,24 @@ public class Character extends Movable {
 		left
 	}
 	
-	private Direction direction;
+	protected Direction direction;
 	
-	private void move(Direction direction) {
+	protected void move(Direction direction) {
 		this.direction = direction;
 		
 		switch(direction) {
 		case up:
-			setX(x-1);
+			y--;
+			break;
 		case down:
-			setX(x+1);
+			y++;
+			break;
 		case right:
-			setY(y-1);
+			x++;
+			break;
 		case left:
-			setY(y++);
+			x--;
+			break;
 		}
-	}
-	
-	public Character(int x, int y) {
-		super(x, y);
-	}
-
-	@Override
-	void update(int dt) {
-
-	}
-
-	@Override
-	void draw() {
-		
 	}
 }
