@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--list of maps-->
+<rootnode>
+	<map x="1" y="1" w="16" h="16" >
+		<teleporter x="5" y="0" />
+		<teleporter x="16" y="5" />
+	</map>
+	
+	<map x="2" y="1" w="16" h="16" >
+		<teleporter x="0" y="5" />
+		<teleporter x="16" y="5" />
+	</map>
+</rootnode>
