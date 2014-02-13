@@ -50,19 +50,24 @@ public class Map {
 	}
 	
 	public static Map[] loadMaps() {
-		File xmlmapsfile
-		Map[] mapstable = null;
-		Map tempmap = null;
-		int x = 0, y = 0, w = 0, h = 0;
+		String xmlmapsfilepath = "res/xml/maps.xml";
+		File xmlmapsfile = new File(xmlmapsfilepath);
 		
-		mapstable = new Map[mapsnodes.length];
-		
-		for(Element map : mapsnodes) {
-			x = Integer.parseInt(map.getAttributeValue("x", "0"));
-			y = Integer.parseInt(map.getAttributeValue("y", "0"));
-			w = Integer.parseInt(map.getAttributeValue("w", "0"));
-			h = Integer.parseInt(map.getAttributeValue("h", "0"));
-		}
+		/*if(xmlmapsfile.exists()) {
+			Document document
+			Map[] mapstable = null;
+			Map tempmap = null;
+			int x = 0, y = 0, w = 0, h = 0;
+			
+			mapstable = new Map[mapsnodes.length];
+			
+			for(Element map : mapsnodes) {
+				x = Integer.parseInt(map.getAttributeValue("x", "0"));
+				y = Integer.parseInt(map.getAttributeValue("y", "0"));
+				w = Integer.parseInt(map.getAttributeValue("w", "0"));
+				h = Integer.parseInt(map.getAttributeValue("h", "0"));
+			}
+		}*/
 		
 		return null;
 	}
