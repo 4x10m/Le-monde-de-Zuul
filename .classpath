@@ -20,5 +20,6 @@
 	<classpathentry kind="lib" path="lib/slick/slick-examples.jar"/>
 	<classpathentry kind="lib" path="lib/slick/slick.jar"/>
 	<classpathentry kind="lib" path="lib/slick/tinylinepp.jar"/>
+	<classpathentry kind="lib" path="lib/jdom/jdom-2.0.5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

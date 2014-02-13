@@ -2,7 +2,12 @@ package core;
 
 
 public class Character {
+	private Map map;
 	protected int x = 0, y = 0;
+	
+	public Character(Map map) {
+		this.map = map;
+	}
 	
 	public enum Direction {
 		up,
@@ -18,16 +23,28 @@ public class Character {
 		
 		switch(direction) {
 		case up:
-			y--;
+			if(map.getCell(x, y - 1).isWalkable()) {
+				y--;
+			}
+			
 			break;
 		case down:
-			y++;
+			if(map.getCell(x, y + 1).isWalkable()) {
+				y++;
+			}
+			
 			break;
 		case right:
-			x++;
+			if(map.getCell(x + 1, y).isWalkable()) {
+				x++;
+			}
+			
 			break;
 		case left:
-			x--;
+			if(map.getCell(x - 1, y).isWalkable()) {
+				x--;
+			}
+			
 			break;
 		}
 	}

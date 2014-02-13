@@ -18,13 +18,15 @@ public class Player extends Character implements KeyListener, Component {
 	private Boolean acceptinginput = null;
 	private Input input = null;
 	
-	public Player(GameContainer container) throws SlickException {
+	public Player(GameContainer container, Map map) throws SlickException {
+		super(map);
+		
 		setInput(container.getInput());
 		
-		uppicture = new Image(uppicturepath, transparentcolor);
+		uppicture = new Image(uppicturepath);
 		downpicture = new Image(downpicturepath);
-		rightpicture = new Image(rightpicturepath, transparentcolor);
-		leftpicture = new Image(leftpicturepath, transparentcolor);
+		rightpicture = new Image(rightpicturepath);
+		leftpicture = new Image(leftpicturepath);
 		picturetodraw = downpicture;
 		
 		x = 8;
@@ -33,9 +35,6 @@ public class Player extends Character implements KeyListener, Component {
 		direction = direction.down;
 		
 		//inputStarted();
-	}
-	public Player(GameContainer container, int x, int y) {
-		setInput(container.getInput());
 	}
 
 	@Override

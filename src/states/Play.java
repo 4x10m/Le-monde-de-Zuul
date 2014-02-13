@@ -21,7 +21,7 @@ public class Play extends BasicGameState {
 			throws SlickException {
 		map = new Map(arg0, Program.MAPW, Program.MAPH);
 		
-		player = new Player(arg0);
+		player = new Player(arg0, map);
 		
 		arg0.getInput().addKeyListener(player);
 	}
