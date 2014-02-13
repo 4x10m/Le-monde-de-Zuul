@@ -102,9 +102,10 @@ public class Player extends Character implements KeyListener, Component {
 		
 		picturetodraw = temp;
 	}
+	
 	@Override
 	public void draw(Graphics arg0) {
-		picturetodraw.draw(x * Map.squarew, y * Map.squareh, Map.squarew, Map.squareh);
+		picturetodraw.draw(getX() * getMap().getSquareW(), getY() * getMap().getSquareH(), getMap().getSquareW(), getMap().getSquareH());
 		//arg0.drawImage(picturetodraw, x * Map.squarew, y * Map.squareh, Map.squarew, Map.squareh);
 	}
 }

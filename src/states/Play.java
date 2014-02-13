@@ -10,6 +10,7 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import core.Cell.NotImplementedCellTypeException;
 import core.Map;
 import core.Player;
 
@@ -19,7 +20,12 @@ public class Play extends BasicGameState {
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
-		map = new Map(arg0, Program.MAPW, Program.MAPH);
+		try {
+			map = new Map(arg0, Program.MAPW, Program.MAPH);
+		} catch (NotImplementedCellTypeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		player = new Player(arg0, map);
 		
