@@ -5,6 +5,7 @@ import java.io.File;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.util.xml.XMLElement;
 import org.newdawn.slick.util.xml.XMLParser;
 
@@ -13,7 +14,8 @@ import enums.CellTypes;
 
 public class Map {
 	Cell[][] cells = null;
-	private int w = 0, h = 0, squarew = 0, squareh = 0;
+	private final int x, y, w, h, squarew, squareh;
+	private final GameContainer container;
 	
 	public int getW() {
 		return w;
@@ -42,7 +44,11 @@ public class Map {
 		return cells[x][y];
 	}
 	
-	public Map(GameContainer container, int w, int h) throws NotImplementedCellTypeException {
+	public Map(GameContainer container, int x, int y, int w, int h) throws NotImplementedCellTypeException {
+		this.container = container;
+		
+		this.x = x;
+		this.y = y;
 		this.w = w;
 		this.h = h;
 		
@@ -53,16 +59,11 @@ public class Map {
 		
 		for(int i = 0; i < w; i++) {
 			for(int j = 0; j < h; j++) {
-				if(i == w - 1 && j == 5) {
-					setCell(i, j, new Cell(CellTypes.Teleporter, i, j, squarew, squareh));
+				if(i == 0 || j == 0 || i == w - 1 || j == h - 1) {
+					cells[i][j] = new Cell(CellTypes.UnWalkable, i, j, squarew, squareh);
 				}
 				else {
-					if(i == 0 || j == 0 || i == w - 1 || j == h - 1) {
-						cells[i][j] = new Cell(CellTypes.UnWalkable, i, j, squarew, squareh);
-					}
-					else {
-						cells[i][j] = new Cell(CellTypes.Walkable, i, j, squarew, squareh);
-					}
+					cells[i][j] = new Cell(CellTypes.Walkable, i, j, squarew, squareh);
 				}
 			}
 		}
@@ -79,30 +80,28 @@ public class Map {
 		}
 	}
 	
-	public static Map[] loadMaps() {
-		/*Map[] mapstable = null;
+	public static Map loadMap(GameContainer container, int x, int y) throws SlickException, NotImplementedCellTypeException {
+		Map value = null;
 		XMLParser parser = new XMLParser();
 		String xmlmapsfilepath = "res/xml/maps.xml";
-		File xmlmapsfile = new File(xmlmapsfilepath);
-		
-		if(!xmlmapsfile.exists()) throw new Exception("Unable to load the game, some documents are missing");
 		
 		XMLElement root = parser.parse(xmlmapsfilepath);
-		
-		mapstable = new Map[root.getChildren().size();
 	
 		for(int i = 0; i < root.getChildren().size(); i++) {
-			Map tempmap = null;
-			int x = 0, y = 0, w = 0, h = 0;
-			
-			for(Element map : mapsnodes) {
-				x = Integer.parseInt(map.getAttributeValue("x", "0"));
-				y = Integer.parseInt(map.getAttributeValue("y", "0"));
-				w = Integer.parseInt(map.getAttributeValue("w", "0"));
-				h = Integer.parseInt(map.getAttributeValue("h", "0"));
+			if(root.getChildren().get(i).getName() == "map") {
+				int loadedx = 0, loadedy = 0, loadedw = 0, loadedh = 0;
+				
+				loadedx = Integer.parseInt(root.getChildren().get(i).getAttribute("x"));
+				loadedy = Integer.parseInt(root.getChildren().get(i).getAttribute("y"));
+				loadedw = Integer.parseInt(root.getChildren().get(i).getAttribute("w"));
+				loadedh = Integer.parseInt(root.getChildren().get(i).getAttribute("h"));
+				
+				if(loadedx == x && loadedy == y) {
+					value = new Map(container, loadedx, loadedy, loadedw, loadedh);
+				}
 			}
-		}*/
+		}
 		
-		return null;
+		return value;
 	}
 }

@@ -8,6 +8,8 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.KeyListener;
 import org.newdawn.slick.SlickException;
 
+import enums.Directions;
+
 public class Player extends Character implements KeyListener, Component {
 	public static final String uppicturepath = "res/pic/player/up.png";
 	public static final String downpicturepath = "res/pic/player/down.png";
@@ -64,16 +66,16 @@ public class Player extends Character implements KeyListener, Component {
 	public void keyPressed(int arg0, char arg1) {
 		switch(arg0) {
 		case Input.KEY_UP:
-			move(Direction.up);
+			move(Directions.up);
 			break;
 		case Input.KEY_DOWN:
-			move(Direction.down);
+			move(Directions.down);
 			break;
 		case Input.KEY_RIGHT:
-			move(Direction.right);
+			move(Directions.right);
 			break;
 		case Input.KEY_LEFT:
-			move(Direction.left);
+			move(Directions.left);
 			break;
 		}
 	}

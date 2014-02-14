@@ -1,6 +1,7 @@
 package core;
 
 import enums.CellTypes;
+import enums.Directions;
 
 
 public class Character {
@@ -28,16 +29,9 @@ public class Character {
 		this.map = map;
 	}
 	
-	public enum Direction {
-		up,
-		down,
-		right,
-		left
-	}
+	protected Directions direction;
 	
-	protected Direction direction;
-	
-	protected void move(Direction direction) {
+	protected void move(Directions direction) {
 		this.direction = direction;
 		Cell nextcell = null;
 		

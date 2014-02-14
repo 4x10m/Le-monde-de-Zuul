@@ -21,7 +21,7 @@ public class Play extends BasicGameState {
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
 		try {
-			map = new Map(arg0, Program.MAPW, Program.MAPH);
+			map = Map.loadMap(arg0, 1, 1);
 		} catch (NotImplementedCellTypeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
