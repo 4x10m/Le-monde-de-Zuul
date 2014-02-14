@@ -33,6 +33,10 @@ public class Map {
 		return squareh;
 	}
 	
+	private void setCell(Cell cell) {
+		cells[cell.getX()][cell.getY()] = cell;
+	}
+	
 	private void setCell(int x, int y, Cell cell) {
 		assert(x < w && y < h);
 		assert(cell != null);
@@ -80,28 +84,44 @@ public class Map {
 		}
 	}
 	
-	public static Map loadMap(GameContainer container, int x, int y) throws SlickException, NotImplementedCellTypeException {
+	public static Map parseMap(GameContainer container, int x, int y) throws SlickException, NotImplementedCellTypeException {
 		Map value = null;
 		XMLParser parser = new XMLParser();
 		String xmlmapsfilepath = "res/xml/maps.xml";
 		
-		XMLElement root = parser.parse(xmlmapsfilepath);
+		XMLElement rootnode = parser.parse(xmlmapsfilepath);
 	
-		for(int i = 0; i < root.getChildren().size(); i++) {
-			if(root.getChildren().get(i).getName() == "map") {
+		for(int i = 0; i < rootnode.getChildren().size(); i++) {
+			if(rootnode.getChildren().get(i).getName() == "map") {
+				XMLElement mapnode = rootnode.getChildren().get(i);
+				
 				int loadedx = 0, loadedy = 0, loadedw = 0, loadedh = 0;
 				
-				loadedx = Integer.parseInt(root.getChildren().get(i).getAttribute("x"));
-				loadedy = Integer.parseInt(root.getChildren().get(i).getAttribute("y"));
-				loadedw = Integer.parseInt(root.getChildren().get(i).getAttribute("w"));
-				loadedh = Integer.parseInt(root.getChildren().get(i).getAttribute("h"));
+				loadedx = Integer.parseInt(mapnode.getAttribute("x"));
+				loadedy = Integer.parseInt(mapnode.getAttribute("y"));
+				loadedw = Integer.parseInt(mapnode.getAttribute("w"));
+				loadedh = Integer.parseInt(mapnode.getAttribute("h"));
 				
 				if(loadedx == x && loadedy == y) {
 					value = new Map(container, loadedx, loadedy, loadedw, loadedh);
+					
+					for(int j = 0; j < mapnode.getChildrenByName("teleporter").size(); j++) {
+						XMLElement teleporternode = mapnode.getChildrenByName("teleporter").get(j);
+						
+						Cell teleporter = Cell.parseTeleporter(teleporternode);
+						
+						value.appendTeleporter(teleporter);
+					}
 				}
 			}
 		}
 		
 		return value;
+	}
+
+	private void appendTeleporter(Cell teleporter) {
+		teleporter.resize(squarew, squareh);
+		
+		setCell(teleporter);
 	}
 }

@@ -2,6 +2,7 @@ package core;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.util.xml.XMLElement;
 
 import enums.CellTypes;
 
@@ -25,6 +26,19 @@ public class Cell {
 	
 	public int getH() {
 		return h;
+	}
+	
+	private void setW(int w) {
+		this.w = w;
+	}
+	
+	private void setH(int h) {
+		this.h = h;
+	}
+	
+	public void resize(int w, int h) {
+		setW(w);
+		setH(h);
 	}
 	
 	public CellTypes getType() {
@@ -56,15 +70,15 @@ public class Cell {
 		
 		}
 	}
+	public Cell(int x, int y, Color color) {
+		this.x = x;
+		this.y = y;
+		this.color = color;
+	}
 	
 	public void move(int x, int y) {
 		this.x = x;
 		this.y = y;
-	}
-	
-	public void resize(int w, int h) {
-		this.w = w;
-		this.h = h;
 	}
 	
 	public void draw(Graphics arg0) {
@@ -74,6 +88,21 @@ public class Cell {
 		arg0.setColor(bordercolor);
 		arg0.drawRect(getX() * getW(), getY() * getH(), w, h);
 		
+	}
+	
+	public static Cell parseTeleporter(XMLElement cell) {
+		Cell value = null;
+		
+		int x = 0, y = 0;
+		Color color = null;
+		
+		x = Integer.parseInt(cell.getAttribute("x"));
+		y = Integer.parseInt(cell.getAttribute("y"));
+		color = Color.decode(cell.getAttribute("color"));
+		
+		value = new Cell(x, y, color);
+		
+		return value;
 	}
 	
 	public class NotImplementedCellTypeException extends Exception {

@@ -2,13 +2,13 @@
 <!--list of maps-->
 <rootnode>
 	<map x="1" y="1" w="16" h="16" >
-		<teleporter x="5" y="0" color="red" />
-		<teleporter x="16" y="5" color="red" />
+		<teleporter x="5" y="0" color="0x00FF00" />
+		<teleporter x="15" y="5" color="0xFF0000" />
 	</map>
 	
 	<map x="2" y="1" w="16" h="16" >
-		<teleporter x="0" y="5" color="red" />
-		<teleporter x="16" y="5" color="red" />
+		<teleporter x="0" y="5" color="0x00FF00" />
+		<teleporter x="16" y="5" color="0x0000FF" />
 	</map>
 	
 	
