@@ -6,7 +6,7 @@ import org.newdawn.slick.Graphics;
 import enums.CellTypes;
 
 public class Cell {
-	private static final Color walkablecolor = Color.gray, unwalkablecolor = Color.black, teleportercolor = Color.yellow;
+	private static final Color walkablecolor = Color.gray, unwalkablecolor = Color.black, teleportercolor = Color.red;
 	private CellTypes type;
 	private Color color = null, bordercolor = Color.black;
 	private int x = 0, y = 0, w = 0, h = 0;
@@ -73,6 +73,9 @@ public class Cell {
 		
 		arg0.setColor(bordercolor);
 		arg0.drawRect(getX() * getW(), getY() * getH(), w, h);
+		arg0.setColor(Color.darkGray);
+		arg0.fillOval(getX() * getW(), getY() * getH(), getW(), getH());
+		
 	}
 	
 	public class NotImplementedCellTypeException extends Exception {
