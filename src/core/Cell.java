@@ -73,8 +73,6 @@ public class Cell {
 		
 		arg0.setColor(bordercolor);
 		arg0.drawRect(getX() * getW(), getY() * getH(), w, h);
-		arg0.setColor(Color.darkGray);
-		arg0.fillOval(getX() * getW(), getY() * getH(), getW(), getH());
 		
 	}
 	

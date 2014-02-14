@@ -14,6 +14,7 @@ public class Player extends Character implements KeyListener, Component {
 	public static final String leftpicturepath = "res/pic/player/left.png";
 	public static final String rightpicturepath = "res/pic/player/right.png";
 	private static final Color transparentcolor = new Color(0, 255, 0, 255);
+	private Inventory inventory = null;
 	private Image uppicture = null, downpicture = null, rightpicture = null, leftpicture = null, picturetodraw = null;
 	private Boolean acceptinginput = null;
 	private Input input = null;
@@ -33,6 +34,8 @@ public class Player extends Character implements KeyListener, Component {
 		y = 8;
 		
 		direction = direction.down;
+		
+		inventory = new Inventory(container);
 		
 		//inputStarted();
 	}
@@ -106,6 +109,7 @@ public class Player extends Character implements KeyListener, Component {
 	@Override
 	public void draw(Graphics arg0) {
 		picturetodraw.draw(getX() * getMap().getSquareW(), getY() * getMap().getSquareH(), getMap().getSquareW(), getMap().getSquareH());
+		inventory.draw(arg0);
 		//arg0.drawImage(picturetodraw, x * Map.squarew, y * Map.squareh, Map.squarew, Map.squareh);
 	}
 }
