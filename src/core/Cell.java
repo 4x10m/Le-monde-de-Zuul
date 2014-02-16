@@ -2,112 +2,42 @@ package core;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.util.xml.XMLElement;
 
-import enums.CellTypes;
-
-public class Cell {
-	private static final Color walkablecolor = Color.gray, unwalkablecolor = Color.black, teleportercolor = Color.red;
-	private CellTypes type;
-	private Color color = null, bordercolor = Color.black;
-	private int x = 0, y = 0, w = 0, h = 0;
+public abstract class Cell {
+	private static final Color backgroundcolor = Color.gray, bordercolor = Color.black;
+	
+	private final int x, y;
 	
 	public int getX() {
 		return x;
 	}
-	
 	public int getY() {
 		return y;
 	}
 	
-	public int getW() {
-		return w;
+	public Color getBackgroundColor() {
+		return backgroundcolor;
 	}
 	
-	public int getH() {
-		return h;
+	public Color getBorderColor() {
+		return bordercolor;
 	}
 	
-	private void setW(int w) {
-		this.w = w;
-	}
-	
-	private void setH(int h) {
-		this.h = h;
-	}
-	
-	public void resize(int w, int h) {
-		setW(w);
-		setH(h);
-	}
-	
-	public CellTypes getType() {
-		return type;
-	}
-	
-	public Cell(CellTypes type, int x, int y, int w, int h) throws NotImplementedCellTypeException {
-		this.x = x;
-		this.y = y;
-		this.w = w;
-		this.h = h;
-		
-		this.color = color;
-		
-		this.type = type;
-		
-		switch(type){
-		case Teleporter:
-			color = teleportercolor;
-			break;
-		case UnWalkable:
-			color = unwalkablecolor;
-			break;
-		case Walkable:
-			color = walkablecolor;
-			break;
-		default:
-			throw new NotImplementedCellTypeException();
-		
-		}
-	}
-	public Cell(int x, int y, Color color) {
-		this.x = x;
-		this.y = y;
-		this.color = color;
-	}
-	
-	public void move(int x, int y) {
+	public Cell(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
 	
-	public void draw(Graphics arg0) {
-		arg0.setColor(color);
-		arg0.fillRect(getX() * getW(), getY() * getH(), w, h);
+	public void draw(Graphics arg0, int w, int h) {
+		int drawedx = 0, drawedy = 0;
 		
-		arg0.setColor(bordercolor);
-		arg0.drawRect(getX() * getW(), getY() * getH(), w, h);
+		drawedx = getX() * w;
+		drawedy = getY() * h;
 		
-	}
-	
-	public static Cell parseTeleporter(XMLElement cell) {
-		Cell value = null;
+		arg0.setColor(getBackgroundColor());
+		arg0.fillRect(drawedx, drawedy, w, h);
 		
-		int x = 0, y = 0;
-		Color color = null;
-		
-		x = Integer.parseInt(cell.getAttribute("x"));
-		y = Integer.parseInt(cell.getAttribute("y"));
-		color = Color.decode(cell.getAttribute("color"));
-		
-		value = new Cell(x, y, color);
-		
-		return value;
-	}
-	
-	public class NotImplementedCellTypeException extends Exception {
-		public NotImplementedCellTypeException() {
-			super("Trying to initialize a type of cell not implemented yet");
-		}
+		arg0.setColor(getBorderColor());
+		arg0.drawRect(drawedx, drawedy, w, h);
 	}
 }

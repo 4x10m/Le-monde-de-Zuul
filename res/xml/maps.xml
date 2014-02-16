@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--list of maps-->
 <rootnode>
-	<map x="1" y="1" w="16" h="16" >
-		<teleporter x="5" y="0" color="0x00FF00" />
-		<teleporter x="15" y="5" color="0xFF0000" />
+	<map id="1" w="16" h="16" >
+		<item x="4" y="5" level="0" />
+		<teleporter x="5" y="0" level="0" relatedmapid="2" relatedmapx="8" relatedmapy="8" />
+		<teleporter x="15" y="5" level="1" relatedmapid="2" relatedmapx="8" relatedmapy="8" />
 	</map>
 	
-	<map x="2" y="1" w="16" h="16" >
-		<teleporter x="0" y="5" color="0x00FF00" />
-		<teleporter x="16" y="5" color="0x0000FF" />
+	<map id="2" w="16" h="16" >
+		<item x="5" y="6" level="1" />
+		<teleporter x="0" y="5" level="1" relatedmapid="1" relatedmapx="8" relatedmapy="8" />
+		<teleporter x="15" y="5" level="1" relatedmapid="1" relatedmapx="8" relatedmapy="8" />
 	</map>
-	
-	
 </rootnode>

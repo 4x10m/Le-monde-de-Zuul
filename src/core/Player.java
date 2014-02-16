@@ -8,84 +8,246 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.KeyListener;
 import org.newdawn.slick.SlickException;
 
+import states.Play;
+import enums.CellTypes;
 import enums.Directions;
 
-public class Player extends Character implements KeyListener, Component {
+public class Player implements KeyListener {
 	public static final String uppicturepath = "res/pic/player/up.png";
 	public static final String downpicturepath = "res/pic/player/down.png";
 	public static final String leftpicturepath = "res/pic/player/left.png";
 	public static final String rightpicturepath = "res/pic/player/right.png";
-	private static final Color transparentcolor = new Color(0, 255, 0, 255);
-	private Inventory inventory = null;
-	private Image uppicture = null, downpicture = null, rightpicture = null, leftpicture = null, picturetodraw = null;
+	public static final int updateinterval = 100;
+	
+	private final Image uppicture, downpicture, rightpicture, leftpicture;
+	
+	private final Inventory inventory;
+	private Map map;
+	
+	private Directions direction;
+	private Image picturetodraw = null;
+	private int x = 0, y = 0, actualtime = 0, nextmapid =0;
+	private Boolean keypressed = null, onteleporter = null;
+	
 	private Boolean acceptinginput = null;
 	private Input input = null;
 	
-	public Player(GameContainer container, Map map) throws SlickException {
-		super(map);
+	@Override
+	public void inputEnded() {
+		acceptinginput = false;
+	}
+	@Override
+	public void inputStarted() {
+		acceptinginput = true;
+	}
+	@Override
+	public boolean isAcceptingInput() {
+		return acceptinginput;
+	}
+	@Override
+	public void setInput(Input arg0) {
+		input = arg0;
+	}
+	private Input getInput() {
+		return input;
+	}
+	
+	public int getX() {
+		return x;
+	}
+	public int getY() {
+		return y;
+	}
+	private void move(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+	
+	public Map getMap() {
+		return map;
+	}
+	
+	public void addTime(int i) {
+		actualtime += i;
 		
-		setInput(container.getInput());
+		if(actualtime >= updateinterval) {
+			updatePosition();
+			
+			actualtime = 0;
+		}
+	}
+
+	public Player(Input input, Map map, Inventory inventory) throws SlickException {
+		this.input = input;
+		this.map = map;
+		this.inventory = inventory;
 		
 		uppicture = new Image(uppicturepath);
 		downpicture = new Image(downpicturepath);
 		rightpicture = new Image(rightpicturepath);
 		leftpicture = new Image(leftpicturepath);
+		
 		picturetodraw = downpicture;
-		
-		x = 8;
-		y = 8;
-		
 		direction = direction.down;
 		
-		inventory = new Inventory(container);
+		x = map.getW() / 2;
+		y = map.getH() / 2;
 		
-		//inputStarted();
-	}
-
-	@Override
-	public void inputEnded() {
-		acceptinginput = false;
-	}
-
-	@Override
-	public void inputStarted() {
-		acceptinginput = true;
-	}
-
-	@Override
-	public boolean isAcceptingInput() {
-		return acceptinginput;
-	}
-
-	@Override
-	public void setInput(Input arg0) {
-		input = arg0;
+		keypressed = false;
+		onteleporter = false;
 	}
 
 	@Override
 	public void keyPressed(int arg0, char arg1) {
-		switch(arg0) {
-		case Input.KEY_UP:
-			move(Directions.up);
-			break;
-		case Input.KEY_DOWN:
-			move(Directions.down);
-			break;
-		case Input.KEY_RIGHT:
-			move(Directions.right);
-			break;
-		case Input.KEY_LEFT:
-			move(Directions.left);
-			break;
+		if(!keypressed) {
+			switch(arg0) {
+			case Input.KEY_UP:
+				keypressed = true;
+				direction = Directions.up;
+				
+				break;
+				
+			case Input.KEY_DOWN:
+				keypressed = true;
+				direction = Directions.down;
+				
+				break;
+				
+			case Input.KEY_RIGHT:
+				keypressed = true;
+				direction = Directions.right;
+				
+				break;
+				
+			case Input.KEY_LEFT:
+				keypressed = true;
+				direction = Directions.left;
+				
+				break;
+				
+			case Input.KEY_SPACE:
+				takeItem();
+				
+				break;
+			}
 		}
 	}
-
+	
 	@Override
 	public void keyReleased(int arg0, char arg1) {
-		
+		if(keypressed) {
+			switch(arg0) {
+			case Input.KEY_UP:
+				keypressed = false;
+				
+				break;
+				
+			case Input.KEY_DOWN:
+				keypressed = false;
+				
+				break;
+				
+			case Input.KEY_RIGHT:
+				keypressed = false;
+				
+				break;
+				
+			case Input.KEY_LEFT:
+				keypressed = false;
+				
+				break;
+			}
+		}
 	}
-	@Override
-	public void update(int dt) {
+	
+	private Cell getNextCell() {
+		Cell nextcell = null;
+		
+		switch(direction) {
+		case up:
+			nextcell = map.getCell(getX(), getY() - 1);
+			
+			break;
+		case down:
+			nextcell = map.getCell(getX(), getY() + 1);
+			
+			break;
+		case right:
+			nextcell = map.getCell(getX() + 1, getY());
+			
+			break;
+		case left:
+			nextcell = map.getCell(getX() - 1, getY());
+			
+			break;
+		}
+		
+		return nextcell;
+	}
+	
+	private void takeItem() {
+		Cell nextcell = null;
+		CommonCell transformedcell = null;
+		Item item = null;
+		
+		nextcell = getNextCell();
+		
+		if(nextcell instanceof CommonCell) {
+			transformedcell = (CommonCell) nextcell;
+			
+			if(transformedcell.hasItem()) {
+				item = transformedcell.giveItem();
+				
+				inventory.appendItem(item);
+			}
+		}
+	}
+	
+	
+	private void updatePosition() {
+		Cell nextcell = null;
+		CommonCell nextcommoncell = null;
+		Teleporter teleportercell = null;
+		
+		if(onteleporter) {
+			teleportercell = (Teleporter) map.getCell(getX(), getY());
+			
+			map = Play.loadMap(nextmapid);
+			
+			onteleporter = false;
+			
+			move(teleportercell.getRelatedMapX(), teleportercell.getRelatedMapY());
+			
+			updatePicture();
+			
+			return;
+		}
+		
+		nextcell = getNextCell();
+		
+		if(nextcell != null) {
+			if(nextcell instanceof CommonCell) {
+				nextcommoncell = (CommonCell) nextcell;
+				
+				
+				if(keypressed && !nextcommoncell.hasItem()) {
+					move(nextcell.getX(), nextcell.getY());
+				}
+			}
+	
+			if(nextcell instanceof Teleporter) {
+				if(keypressed && inventory.contains(((Teleporter) nextcell).getLevel())) {
+					onteleporter = true;
+					move(nextcell.getX(), nextcell.getY());
+					nextmapid = ((Teleporter)nextcell).getRelatedMap();
+				}
+			}
+		}
+		
+		updatePicture();
+	}
+	
+	public void updatePicture() {
 		Image temp = null;
 		
 		switch(direction) {
@@ -101,17 +263,17 @@ public class Player extends Character implements KeyListener, Component {
 		case up:
 			temp = uppicture;
 			break;
-		default:
-			break;
 		}
 		
 		picturetodraw = temp;
 	}
-	
-	@Override
-	public void draw(Graphics arg0) {
-		picturetodraw.draw(getX() * getMap().getSquareW(), getY() * getMap().getSquareH(), getMap().getSquareW(), getMap().getSquareH());
-		inventory.draw(arg0);
-		//arg0.drawImage(picturetodraw, x * Map.squarew, y * Map.squareh, Map.squarew, Map.squareh);
+
+	public void draw(int w, int h) {
+		int drawedx = 0, drawedy = 0;
+		
+		drawedx = getX() * w;
+		drawedy = getY() * h;
+		
+		picturetodraw.draw(drawedx, drawedy, w, h);
 	}
 }
